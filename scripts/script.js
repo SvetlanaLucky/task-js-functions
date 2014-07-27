@@ -33,20 +33,21 @@ var data = '{"images" :[' +
                         ']' +
             '}';
 
-var myGalleryObject=JSON.parse(data);
+var myGallery=JSON.parse(data);
 
 
-myGalleryObject.toDate=function(){
+myGallery.toDate=function(){
     for(var i in this.images){
         var tempData=this.images[i].date;
         this.images[i].date=new Date(tempData);
     }
-    console.log("\ndates parsed to Data object");
+    console.log("\n----dates parsed to Data object----");
 };
 
-myGalleryObject.toDate(); //наверное есть вариант поумнее, но пока так
+myGallery.toDate(); //наверное есть вариант поумнее, но пока так
 
-myGalleryObject.preview=function(){
+myGallery.preview=function(){
+    console.log("\n----gallery consists of:----");
     for(var i in this.images){
         console.log("\nname",this.images[i].name,
                     "\npath",this.images[i].path,
@@ -60,54 +61,71 @@ newImg = {
     name: "squirrel",
     path: "images/squirrel.png",
     description: "The best squirrel ever",
-    date: new Date("2014-07-21T09:06:05.544Z")
+    date: new Date(Date.now())
 };
 
-myGalleryObject.add=function (newImg){
+myGallery.add=function (newImg){
     this.images.push(newImg);
-    console.log("/nImage",newImg.name,"added to gallery");
+    console.log("\n----Image",newImg.name,"added to gallery----");
     return this; //не факт что нужно
 };
-myGalleryObject.add(newImg);
-myGalleryObject.preview();
+myGallery.add(newImg);
+myGallery.preview();
 
-myGalleryObject.remove=function (imgForDel){ //добавить проверку существует ли удаляемая картинка
+myGallery.remove=function (imgForDel){ //добавить проверку существует ли удаляемая картинка
     for(var i in this.images){
         if (this.images[i].name==imgForDel)
             var removeIndex=i;
     }
     if (removeIndex===undefined)
-        console.log("\nImage",imgForDel,"can't be removed from gallery");
+        console.log("\n----Image",imgForDel,"can't be removed from gallery----");
     else    {this.images.splice(removeIndex,1);
-            console.log("\nImage",imgForDel,"removed from gallery");}
+            console.log("\n----Image",imgForDel,"removed from gallery----");}
     return this; //не факт что нужно
 };
 
-myGalleryObject.remove("monkey");
-myGalleryObject.remove("dog");
-myGalleryObject.preview();
+myGallery.remove("monkey");
+myGallery.remove("dog");
+myGallery.preview();
 
-myGalleryObject.edit=function (imgForEdition, newName, newPath, newDescription, newDate){
+myGallery.edit=function (imgForEdition, newName, newPath, newDescription, newDate){
 
     for(var i in this.images){
         if (this.images[i].name==imgForEdition)
             var editIndex=i;
     }
     if (editIndex===undefined)
-        console.log("\nImage",imgForEdition,"can't be edited in gallery");
+        console.log("\n----Image",imgForEdition,"can't be edited in gallery----");
     else{
         this.images[editIndex].name=newName||this.images[editIndex].name;
         this.images[editIndex].path=newPath||this.images[editIndex].path;
         this.images[editIndex].description=newDescription||this.images[editIndex].description;
         this.images[editIndex].date=new Date(newDate);
-        console.log("\nImage",imgForEdition,"edited successfully to", this.images[editIndex].name);
+        console.log("\n----Image",imgForEdition,"edited successfully to", this.images[editIndex].name,"----");
     }
     return this; //не факт что нужно
 };
 
 
+myGallery.edit("dog");
+myGallery.edit("cat","kitten", "images/cat.png", "The best kitten ever", Date.now());
+myGallery.preview();
 
-myGalleryObject.edit("dog");
-myGalleryObject.edit("cat","kitten", "images/cat.png", "The best kitten ever", Date.now());
-myGalleryObject.preview();
+myGallery.sort = function (fieldSorted){
+    this.images.sort(function(arg1, arg2){
+        if(arg1[fieldSorted] > arg2[fieldSorted]){
+            return 1;
+        }
+        else if(arg1[fieldSorted] < arg2[fieldSorted]){
+            return -1;
+        }
+            return 0;
+    });
+};
 
+myGallery.sort("name");
+console.log("\n----Gallery sorted by NAME----");
+myGallery.preview();
+myGallery.sort("date");
+console.log("\n----Gallery sorted by DATE----");
+myGallery.preview();
