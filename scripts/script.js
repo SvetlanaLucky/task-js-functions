@@ -5,7 +5,7 @@
  * Time: 22:32
  * To change this template use File | Settings | File Templates.
  */
-var data = '{"images" :[' +
+var animals = '{"images" :[' +
                             '{ ' +
                             '"name": "cat",' +
                             '"path": "images/cat.png",' +
@@ -32,9 +32,36 @@ var data = '{"images" :[' +
                             '}' +
                         ']' +
             '}';
+var flowers = '{"images" :[' +
+                            '{ ' +
+                            '"name": "rose",' +
+                            '"path": "images/rose.png",' +
+                            '"description": "The best rose ever",' +
+                            '"date": "2014-07-21T09:05:34.540Z"' +
+                            '},' +
+                            '{' +
+                            '"name": "violet",' +
+                            '"path": "images/violet.png",' +
+                            '"description": "The best violet ever",' +
+                            '"date": "2014-07-25T09:06:05.544Z"' +
+                            '},' +
+                            '{' +
+                            '"name": "sunflower",' +
+                            '"path": "images/sunflower.png",' +
+                            '"description": "",' +
+                            '"date": "2014-07-23T09:07:24.187Z"' +
+                            '},' +
+                            '{' +
+                            '"name": " camomile",' +
+                            '"path": "images/ camomile.png",' +
+                            '"description": "The best  camomile ever",' +
+                            '"date": "2014-07-21T09:07:47.683Z"' +
+                            '}' +
+                        ']' +
+            '}';
 
-var myGallery=JSON.parse(data);
-
+var myGallery=JSON.parse(animals);
+var myGalleryFlowers=JSON.parse(flowers);
 
 myGallery.toDate=function(){
     for(var i in this.images){
@@ -204,4 +231,29 @@ console.log(serialisedIfHasPath);
 
 //------------------change context-------------------------
 
+console.log("\n----CHANGE CONTEXT----");
+myGallery.preview.call(myGalleryFlowers);
 
+myGalleryFlowers.sort=myGallery.sort.bind(myGalleryFlowers) ;
+myGalleryFlowers.sort("name");
+myGallery.preview.call(myGalleryFlowers);
+
+
+myGallery.edit.apply(myGalleryFlowers, ["cat","cat", "images/cat.png", "The best kitten ever", Date.now()]);
+myGallery.edit.apply(myGalleryFlowers, ["rose","redRose", "images/redRose.png", "The best flower ever", Date.now()]);
+myGallery.preview.call(myGalleryFlowers);
+
+var serialisedFlowers=myGallery.serialise.call(myGalleryFlowers);
+console.log("\n----after serialisation----");
+console.log(serialisedFlowers);
+
+
+var serialisedFlowersNames=myGallery.serialiseNames.call(myGalleryFlowers);
+console.log("\n----after serialisation (only names)----");
+console.log(serialisedFlowersNames);
+//myGallery.sort("name");
+//console.log("\n----Gallery sorted by NAME----");
+//myGallery.preview();
+//myGallery.sort("date");
+//console.log("\n----Gallery sorted by DATE----");
+//myGallery.preview();
