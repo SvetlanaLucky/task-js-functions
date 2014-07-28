@@ -20,7 +20,7 @@ var data = '{"images" :[' +
                             '},' +
                             '{' +
                             '"name": "giraffe",' +
-                            '"path": "images/giraffe.png",' +
+                            '"path": "",' +
                             '"description": "",' +
                             '"date": "2014-07-21T09:07:24.187Z"' +
                             '},' +
@@ -129,3 +129,79 @@ myGallery.preview();
 myGallery.sort("date");
 console.log("\n----Gallery sorted by DATE----");
 myGallery.preview();
+
+//myGallery.filter=function(filerField){
+//        for(var i in this.images){
+//        if (this.images[i].name==filerField||this.images[i].path==filerField||this.images[i].description==filerField||this.images[i].date==filerField)
+//        console.log("\nname",this.images[i].name,
+//            "\npath",this.images[i].path,
+//            "\ndescription",this.images[i].description,
+//            "\ndate",this.images[i].date);
+//    }
+//    //а как ещё фильтровать? по факту наличия поля что ли?
+//};
+
+var filteredGallery;
+var c=function compare(fieldName, fieldContent){
+    for(var i in this.images){
+        return this.images[i].fieldName==fieldContent;
+    }
+};
+myGallery.filter=function(fieldName, fieldContent){
+     return this.images.filter(c);
+};
+
+
+
+console.log("\n----I'm so confused with this filter method T.T----");
+filteredGallery=myGallery.filter("description", "The best dinosaur ever");
+console.log(filteredGallery);
+
+
+myGallery.isDescription=function(){
+
+    for(var i in this.images){
+
+        if(!myGallery.images[i].description) {console.log(false);break;}
+        else console.log(true);
+
+    }
+
+};
+console.log("\n----all images has descriptions? true/false----");
+myGallery.isDescription();
+
+
+//-----------------------JSON--------------------------------
+
+myGallery.serialise=function(){
+    return JSON.stringify(this);
+};
+var serialised=myGallery.serialise();
+console.log("\n----after serialisation----");
+console.log(serialised);
+
+myGallery.serialiseNames=function(){
+    return JSON.stringify(this.images, ["name"]);
+};
+
+var serialisedImgNames=myGallery.serialiseNames();
+console.log("\n----after serialisation (only names)----");
+console.log(serialisedImgNames);
+
+
+myGallery.serialiseIfPath=function(){
+    var str="";
+        for(var i in this.images){
+            if(!myGallery.images[i].path) continue;
+            else  str+=JSON.stringify(this.images[i]);
+        }
+    return str;
+};
+var serialisedIfHasPath=myGallery.serialiseIfPath();
+console.log("\n----after serialisation (if nas path)----");
+console.log(serialisedIfHasPath);
+
+//------------------change context-------------------------
+
+
